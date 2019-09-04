@@ -1,7 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
 
-# In[85]:
 
 
 from sklearn import datasets, linear_model
@@ -15,10 +12,8 @@ import numpy as np
 import math
 
 
-# In[123]:
 
 
-#regr = linear_model.LinearRegression()
 dataset = pd.read_csv('dataset.csv')
 df = pd.DataFrame(dataset)
 X = df[['NS','surface_total_in_m2', 'rooms']]
@@ -26,7 +21,6 @@ Y = df["price"]
 regr = linear_model.LinearRegression()
 regr.fit(X, Y)
 
-#print('Intercept: \n', regr.intercept_)
 print('Coefficients all dataset: \n', regr.coef_)
 
 X_train, X_test, y_train, y_test = train_test_split(X,Y, test_size=0.2) 
@@ -34,7 +28,7 @@ regr.fit(X_train, y_train)
 print('Predict: \n', regr.predict(X_test))
 print('Coefficients train: \n', regr.coef_)
 
-# Mostramos resultados
+# Muestro resultados
 plt.plot(X_train, y_train, 'ro', color = 'red', label='Datos Originales')
 plt.title('Modelo de regresion lineal')
 plt.plot(X_train, regr.predict(X_train), 'ro', color='blue', label='Recta de regresion')

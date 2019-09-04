@@ -1,5 +1,4 @@
-#!/usr/bin/env python
-# coding: utf-8
+
 
 #libro utilizado Data Science from Scratch: First Principles with Python, Joel Grus, 2015.
 
@@ -37,7 +36,6 @@ x = get_x(dataset)
 y = get_y(dataset)
 
 
-# In[487]:
 
 
 NS = dataset['NS']
@@ -48,14 +46,12 @@ VP = dataset['price']
 def plot_model(x,y,z):
     threedee = plt.figure().gca(projection='3d')
     threedee.scatter(x,y,z)
-    #threedee.scatter(0.7579544029403025, 0.420571580830845,0.25891675029296335)
     plt.show()
 plot_model(NS,CA,MC)
 
 dataset.plot.scatter(x="rooms", y="price")
 plt.show()
 
-# In[470]:
 
 
 def dot(v, w):
@@ -68,7 +64,6 @@ def error(x_i, y_i, beta):
     return y_i - predict(x_i, beta)
 
 
-# In[472]:
 
 
 def squared_error(x_i, y_i, beta):
@@ -80,7 +75,6 @@ def squared_error_gradient(x_i, y_i, beta):
     return [-2 * x_ij * error(x_i, y_i, beta) for x_ij in x_i]
 
 def in_random_order(data):
-    """generator that returns the elements of data in random order"""
     indexes = [i for i, _ in enumerate(data)] # create a list of indexes
     random.shuffle(indexes)
     for i in indexes:
@@ -102,17 +96,14 @@ def minimize_stochastic(target_fn, gradient_fn, x, y, theta_0, alpha_0=0.01):
             iterations_with_no_improvement = 0
             alpha = alpha_0
         else:
-            # otherwise we're not improving, so try shrinking the step size
             iterations_with_no_improvement += 1
             alpha *= 0.9
-            # and take a gradient step for each of the data points
         for x_i, y_i in in_random_order(data):
             gradient_i = gradient_fn(x_i, y_i, theta)
             theta = vector_subtract(theta, scalar_multiply(alpha, gradient_i))
     return min_theta
 
 
-# In[473]:
 
 
 def estimate_beta(x, y):
@@ -124,7 +115,6 @@ beta = estimate_beta(x, y)
 print("BETA = ", beta)
 
 
-# In[474]:
 
 
 def least_squares_fit(x, y):
@@ -180,7 +170,6 @@ def multiple_r_squared(x, y, beta):
     return 1.0 - sum_of_squared_errors / total_sum_of_squares(y)
 
 
-# In[475]:
 
 
 print("R-SCUARED = ", multiple_r_squared(x, y, beta))

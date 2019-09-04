@@ -1,8 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[481]:
-
 from typing import List
 import pandas as pd
 import random
@@ -12,7 +7,7 @@ import numpy as np
 import math
 
 
-# In[484]:
+
 
 
 dataset = pd.read_csv('dataset.csv')
@@ -37,7 +32,7 @@ x = get_x(dataset)
 y = get_y(dataset)
 
 
-# In[487]:
+
 
 
 NS = dataset['NS']
@@ -48,14 +43,13 @@ VP = dataset['price']
 def plot_model(x,y,z):
     threedee = plt.figure().gca(projection='3d')
     threedee.scatter(x,y,z)
-    #threedee.scatter(0.7579544029403025, 0.420571580830845,0.25891675029296335)
     plt.show()
 plot_model(NS,CA,MC)
 
 dataset.plot.scatter(x="rooms", y="price")
 plt.show()
 
-# In[470]:
+
 
 
 def dot(v, w):
@@ -68,7 +62,7 @@ def error(x_i, y_i, beta):
     return y_i - predict(x_i, beta)
 
 
-# In[472]:
+
 
 
 def squared_error(x_i, y_i, beta):
@@ -96,23 +90,18 @@ def minimize_stochastic(target_fn, gradient_fn, x, y, theta_0, alpha_0=0.01):
     while iterations_with_no_improvement < 100:
         value = sum(target_fn(x_i, y_i, theta) for x_i, y_i in data)
         if value < min_value:
-            # if we've found a new minimum, remember it
-            # and go back to the original step size
             min_theta, min_value = theta, value
             iterations_with_no_improvement = 0
             alpha = alpha_0
         else:
-            # otherwise we're not improving, so try shrinking the step size
             iterations_with_no_improvement += 1
             alpha *= 0.9
-            # and take a gradient step for each of the data points
         for x_i, y_i in in_random_order(data):
             gradient_i = gradient_fn(x_i, y_i, theta)
             theta = vector_subtract(theta, scalar_multiply(alpha, gradient_i))
     return min_theta
 
 
-# In[473]:
 
 
 def estimate_beta(x, y):
@@ -124,7 +113,6 @@ beta = estimate_beta(x, y)
 print("BETA = ", beta)
 
 
-# In[474]:
 
 
 def least_squares_fit(x, y):
@@ -142,8 +130,8 @@ def multiple_r_squared(x, y, beta):
 
 from typing import TypeVar, Callable
 
-X = TypeVar('X')        # Generic type for data
-Stat = TypeVar('Stat') # Generic type for "statistic"
+X = TypeVar('X')        
+Stat = TypeVar('Stat') 
 
 
 def bootstrap_sample(data: List[X]) -> List[X]:
@@ -154,15 +142,12 @@ def bootstrap_statistic(data: List[X],
                         num_samples: int) -> List[Stat]:
 	"""evaluates stats_fn on num_samples bootstrap samples from data"""
 	return [stats_fn(bootstrap_sample(data)) for _ in range(num_samples)]
-# 101 points all very close to 100
 close_to_100 = [99.5 + random.random() for _ in range(101)]
 
-# 101 points, 50 of them near 0, 50 of them near 200
 far_from_100 = ([99.5 + random.random()] +
                 [random.random() for _ in range(50)] +
                 [200 + random.random() for _ in range(50)])
 
-#from scratch.statistics import median, standard_deviation
 
 def sum_of_squares(v: Vector) -> float:
 	return dot(v, v)
@@ -205,20 +190,16 @@ assert standard_deviation(medians_far) > 90
 from scratch.probability import normal_cdf
 def p_value(beta_hat_j: float, sigma_hat_j: float) -> float:
     if beta_hat_j > 0:
-        # if the coefficient is positive, we need to compute twice the
-        # probability of seeing an even *larger* value
         return 2 * (1 - normal_cdf(beta_hat_j / sigma_hat_j))
     else:
-        # otherwise twice the probability of seeing a *smaller* value
         return 2 * normal_cdf(beta_hat_j / sigma_hat_j)
 
-assert p_value(30.58, 1.27)   < 0.001  # constant term
-assert p_value(0.972, 0.103)  < 0.001  # num_friends
-assert p_value(-1.865, 0.155) < 0.001  # work_hours
-assert p_value(0.923, 1.249) > 0.4 # phd
+assert p_value(30.58, 1.27)   < 0.001  
+assert p_value(0.972, 0.103)  < 0.001  
+assert p_value(-1.865, 0.155) < 0.001  
+assert p_value(0.923, 1.249) > 0.4 
 
-# alpha is a *hyperparameter* controlling how harsh the penalty is
-# sometimes it's called "lambda" but that already means something in Python
+
 def ridge_penalty(beta: Vector, alpha: float) -> float:
     return alpha * dot(beta[1:], beta[1:])
 
@@ -241,10 +222,7 @@ def sqerror_ridge_gradient(x: Vector,
                            y: float,
                            beta: Vector,
                            alpha: float) -> Vector:
-    """
-    the gradient corresponding to the ith squared error term
-    including the ridge penalty
-    """
+    
     return add(sqerror_gradient(x, y, beta),
                ridge_penalty_gradient(beta, alpha))
 
@@ -262,7 +240,6 @@ def least_squares_fit_ridge(xs: List[Vector],
                             learning_rate: float,
                             num_steps: int,
                             batch_size: int = 1) -> Vector:
-    # Start guess with mean
     guess = [random.random() for _ in xs[0]]
 
     for i in range(num_steps):
@@ -336,8 +313,6 @@ def main():
     from scratch.gradient_descent import gradient_step
     
     random.seed(0)
-    # I used trial and error to choose niters and step_size.
-    # This will run for a while.
     learning_rate = 0.001
     
     beta = least_squares_fit(inputs, daily_minutes_good, learning_rate, 5000, 25)
@@ -359,9 +334,8 @@ def main():
         print("bootstrap sample", beta)
         return beta
     
-    random.seed(0) # so that you get the same results as me
+    random.seed(0) 
     
-    # This will take a couple of minutes!
     bootstrap_betas = bootstrap_statistic(list(zip(inputs, daily_minutes_good)),
                                           estimate_sample_beta,
                                           100)
@@ -372,34 +346,27 @@ def main():
     
     print(bootstrap_standard_errors)
     
-    # [1.272,    # constant term, actual error = 1.19
-    #  0.103,    # num_friends,   actual error = 0.080
-    #  0.155,    # work_hours,    actual error = 0.127
-    #  1.249]    # phd,           actual error = 0.998
+ 
     
     random.seed(0)
     beta_0 = least_squares_fit_ridge(inputs, daily_minutes_good, 0.0,  # alpha
                                      learning_rate, 5000, 25)
-    # [30.51, 0.97, -1.85, 0.91]
     assert 5 < dot(beta_0[1:], beta_0[1:]) < 6
     assert 0.67 < multiple_r_squared(inputs, daily_minutes_good, beta_0) < 0.69
     
     beta_0_1 = least_squares_fit_ridge(inputs, daily_minutes_good, 0.1,  # alpha
                                        learning_rate, 5000, 25)
-    # [30.8, 0.95, -1.83, 0.54]
     assert 4 < dot(beta_0_1[1:], beta_0_1[1:]) < 5
     assert 0.67 < multiple_r_squared(inputs, daily_minutes_good, beta_0_1) < 0.69
     
     
     beta_1 = least_squares_fit_ridge(inputs, daily_minutes_good, 1,  # alpha
                                      learning_rate, 5000, 25)
-    # [30.6, 0.90, -1.68, 0.10]
     assert 3 < dot(beta_1[1:], beta_1[1:]) < 4
     assert 0.67 < multiple_r_squared(inputs, daily_minutes_good, beta_1) < 0.69
     
     beta_10 = least_squares_fit_ridge(inputs, daily_minutes_good,10,  # alpha
                                       learning_rate, 5000, 25)
-    # [28.3, 0.67, -0.90, -0.01]
     assert 1 < dot(beta_10[1:], beta_10[1:]) < 2
     assert 0.5 < multiple_r_squared(inputs, daily_minutes_good, beta_10) < 0.6
     

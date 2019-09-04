@@ -9,24 +9,11 @@ from sklearn import linear_model
 from sklearn.model_selection import KFold
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
-'''
-X = np.array([[1, 2], [3, 4], [1, 2], [3, 4]])
-print (X)
-y = np.array([1, 2, 3, 4])
-kf = KFold(n_splits=2)
-kf.get_n_splits(X)
 
- 
-
-for train_index, test_index in kf.split(X):
-   print("TRAIN:", train_index, "TEST:", test_index)
-   X_train, X_test = X[train_index], X[test_index]
-   y_train, y_test = y[train_index], y[test_index]
-'''
 
 data = pd.read_csv('dataset.csv')
 
-#Seleccionamos las variables independientes
+#Selecciono las variables independientes
 X = data[['NS','surface_total_in_m2','rooms']]
 
 #Defino la variable dependiente
